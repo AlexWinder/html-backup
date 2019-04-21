@@ -4,7 +4,7 @@ This is a simple BASH script which can be run on systems with BASH. This allows 
 
 ## Contributors
 
-- [Alex Winder](https://www.alexwinder.uk) 
+- [Alex Winder](https://www.alexwinder.uk)
 
 ## Getting Started
 
@@ -75,6 +75,14 @@ Then append the end of the crontab with a new line:
 > 0 4 * * * /var/backups/html/backup.sh
 
 This will cause the script to run every day at 04:00, from the current logged in user. If you wish to run as a different user then you will need to open the crontab for that particular user. This crontab will create a backup of the HTML content specified.
+
+### Extracting Backup
+
+If you wish to extract a particular backup you can do so with the following command:
+
+> tar -xvf /var/backups/html/www.example.com/www.example.com_htmlbackup-DATE-TIME.tar.gz
+
+You should swap in the path and filename as per your own setup.
 
 ## License
 
