@@ -16,71 +16,58 @@ To be able to use this you must have the following installed:
 
 This script has been tested to work on the following systems:
 
-- Debian 8 Jessie
-- Debian 9 Stretch
+- Debian 8 & 9
+- Ubuntu 22
 
-### Installing
+## Usage
 
-#### Store the Backup Script
+The [html-backup.sh](html-backup.sh) script accepts a number of named parameters which allows you to customise it for your particular environment.
 
-In order for this script to work correctly it is advised that create the correct folder to place the script. This has been defined as ```/var/backups/html``` in [backup.sh](backup.sh). You are welcome to change this as per your own requirements.
+- `--help` - Show a help guide on the script. If used then no other parameters will be considered.
+- `--to` - Where you would like to back the files up to. Default: `/var/backups/html`.
+- `--website` - The name of the website with which the backed up files related to.
+- `--from` - The source directory of the website files.
+- `--days` - The number of days to keep backup files before deleting them. Default: `7` (days).
 
-> mkdir -p /var/backups/html
+The script executed on the command line, with the minimum required parameters of `--website` and `--from`.
 
-The [backup.sh](backup.sh) should be placed in this location.
+```bash
+./html-backup.sh --website <website_name> --from </path/to/website/files>
+```
 
-#### Configure Values
+This will create the HTML backup value set in the `--to` parameter, by default this is `/var/backups/html` if you do not specify the `--to` parameter. A subdirectory will then be created based on your `--website` parameter. Please note that this directory will be created if it doesn't already exist.
 
-Once the script is in the correct location then the following information is required to be entered on the backup script:
+You are free to make use of any of the named parameters to customise for your particular usecase. An example usage is listed below:
 
-- The website content you are wanting to backup (line 4 "html").
-- The directory where the website content is located (line 7 "html_location").
-- The location of the temporary directory (line 11 "tmp_location").
-- The number of days you wish to store backup files for (line 14 "days"). This is by default set to 7 days.
+```bash
+./html-backup.sh --website example.com --from /var/www/example.com --to /home/user/backups --days 30
+```
 
-##### Optional Values
+The above example will backup the files in `/var/www/example.com` into a directory of `/home/user/backups/example.com`. It will then do a scan and delete any backups which are found to be older than `30` days.
 
-If you wish you can also edit the following:
+## Automate via Cron
 
-- The location where backups will be sent (line 27 "backup_location").
+The script can be automated via a crontab. To do this first open the crontab:
 
-#### Change Permissions
-
-Once the information above has been inserted then the permissions of the file should be changed:
-
-> chmod 700 /var/backups/html/backup.sh
-
-If you have specified a different location to the example given above then you will need to adjust the location accordingly.
-
-#### Test Script
-
-The file can then be tested to see if all things work as expected.
-
-> /var/backups/html/backup.sh
-
-If you have specified a different location to the example given above then you will need to adjust the location accordingly.
-
-A new directory should be created which will be the same as the value in set in the "html" value. Inside this directory should be a complete SQLdump of the database defined.
-
-During testing you will see an output of all of the files which are being included in the tar backup.
-
-#### Automate via Cron
-
-The script can now be added to the crontab, if required, to run automatically. To do this first open the crontab:
-
-> crontab -e
+```bash
+crontab -e
+```
 
 Then append the end of the crontab with a new line:
 
-> 0 4 * * * /var/backups/html/backup.sh
+```bash
+0 4 * * * /path/to/html-backup/html-backup.sh --website <website_name> --from </path/to/website/files>
+```
 
 This will cause the script to run every day at 04:00, from the current logged in user. If you wish to run as a different user then you will need to open the crontab for that particular user. This crontab will create a backup of the HTML content specified.
 
-### Extracting Backup
+## Extracting Backup
 
 If you wish to extract a particular backup you can do so with the following command:
 
-> tar -xvf /var/backups/html/www.example.com/www.example.com_htmlbackup-DATE-TIME.tar.gz
+```bash
+tar -xvf /var/backups/html/example.com/www.example.com_htmlbackup-DATE-TIME.tar.gz
+```
 
 You should swap in the path and filename as per your own setup.
 
