@@ -102,6 +102,6 @@ sha256sum ${to}${website}/${backup_name}.tar.gz > ${to}${website}/${backup_name}
 rm -rf ${tmp}${backup_name}/
 
 # Set a value to be used to find all backups with the same name
-find_backup_name="${to}${website}/${website}_htmlbackup*.tar.gz"
+find_backup_name="${to}${website}/${website}_htmlbackup*.tar.gz*"
 # Delete files which are older than the number of days defined
 find $find_backup_name -mtime +$days -type f -delete
